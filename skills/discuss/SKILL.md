@@ -1,0 +1,121 @@
+---
+name: discuss
+description: Use when discussing, exploring, shaping, challenging, or revisiting an idea, request, artifact, design, or implementation direction, or when an open-ended request or new evidence makes the next approach uncertain.
+---
+
+# Discuss
+
+Build enough shared understanding to choose the next sound action.
+
+Discussion may shape understanding, recommendations, proposed work, and checkpoints. It does not authorize mutation, settle a user-owned choice implicitly, or turn exploratory output into production behavior.
+
+## Follow The Discussion Route
+
+Use this as a directed map, not a checklist:
+
+```text
+[Entry or re-entry]
+-> [Orient from accepted context and live evidence]
+-> [Focus the highest uncertainty that could change the route]
+-> [Inspect facts / ask / compare meaningful paths]
+-> [Route from what is now supported]
+   -> enough understanding
+      -> task-shaped and continuity may matter
+         -> Track Work decides whether to recommend a Working Record
+      -> otherwise -> return direction to Workflow
+   -> one user-owned choice or source conflict -> Decision Gate
+   -> evidence needed -> propose a bounded learning action
+                         -> when authorized -> Track Work
+                            -> Execute Work or wait from its result
+                         -> re-enter Discuss with evidence
+   -> unexplained or repeated failure -> Diagnose Failure
+   -> stable accepted content or strategy -> Write Spec / Write Plan
+```
+
+Preserve decisions, evidence, artifacts, and work that still hold whenever discussion re-enters from implementation, verification, review, failure, or another conversation.
+
+## Enter Or Exit Cleanly
+
+Use Discuss when:
+
+- the user is exploring what to build or how to approach it;
+- important outcomes, boundaries, alternatives, or tradeoffs remain open;
+- an artifact, design, implementation direction, or earlier assumption needs reconsideration;
+- new evidence makes the next approach uncertain.
+
+Do not force discussion for a direct factual question or clear bounded action whose intended result is understood. Feedback alone does not require discussion. Re-enter only when it reopens assumptions, options, or direction.
+
+When one known choice or source conflict blocks progress, use the separately installed `decision-gate` skill when available. When a failure lacks a supported cause or keeps recurring, use `diagnose-failure` when available before treating it as a design problem. If a focused skill is unavailable, follow the corresponding route directly or state the capability boundary.
+
+## Orient Without Restarting
+
+Identify only what the next decision needs:
+
+- goal and current direction;
+- settled facts and explicit decisions;
+- tentative assumptions or viable alternatives;
+- evidence and uncertainty that could change the route.
+
+When a Working Record exists, orient from its current context and check important claims against live evidence. Read older history only when the present direction or rationale is unclear. Update only what new evidence affects.
+
+## Focus The Discussion
+
+Stay with the highest unresolved question that could change the outcome, boundary, approach, or acceptance. Leave dependent details until that question is sufficiently understood.
+
+Inspect code, tests, docs, policies, artifacts, repository state, supplied material, or current primary sources when they can answer factual questions and suitable tools are available. Ask the user about intent, priorities, constraints, and tradeoffs that evidence cannot decide. Never imply that inspection occurred without observed tool evidence.
+
+When materially different paths remain viable:
+
+1. compare only the few that matter, including the current path or waiting when real;
+2. state what each optimizes, its main assumptions and tradeoffs, and evidence that could rule it out;
+3. recommend a direction when evidence supports one and say what could change that recommendation;
+4. leave user-owned choices with the user and do not keep arguing for a rejected path without new evidence.
+
+Ask in natural prose, usually about one main topic at a time. Use a menu only for genuinely closed choices. Do not manufacture alternatives for an obvious local decision.
+
+When architecture, interfaces, ownership, state, failure contracts, or spreading complexity shape the direction, use `design-for-depth` when available as a lens and retain it while the boundary remains design-bearing.
+
+## Learn Through Bounded Action
+
+When discussion alone cannot answer a material question, propose the smallest useful learning or delivery action:
+
+```text
+Type: Learning | Delivery | Deepening
+Question or outcome:
+Smallest bounded action:
+Expected evidence:
+Useful checkpoint, if any:
+Stop, discard, revise, or promote when:
+```
+
+A proposal is not authorization. Before execution, confirm that the action is requested or approved and that an appropriate tool is available. When the action is authorized, use `track-work` when available to decide whether durable task memory is needed, then route to `execute-work` when available or apply the bounded execution method directly.
+
+Return with the observed result. Treat prototypes, tests, benchmarks, sketches, and working behavior as evidence, not automatic approval of their design or promotion. Preserve what still holds and re-enter only the affected question.
+
+## Preserve Only Useful State
+
+Keep discussion legible as:
+
+- **Settled:** supported fact or explicit decision.
+- **Tentative:** current hypothesis or provisional direction.
+- **Open:** unresolved and capable of changing the next action.
+
+Keep this state in conversation while context is sufficient. Use `track-work` when available if evolving context must survive summarization, context loss, a pause, or another session. Use `write-spec` for stable accepted content and `write-plan` for a stable ordered strategy when those skills and a suitable durable destination are available. Do not create an artifact merely because discussion occurred.
+
+Recommend independent review, a commit, user decision, or continuity checkpoint only when it protects dependent work or reduces material risk. Do not offer to perform a checkpoint unless the needed tool and access are available. Discussion may shape and preserve an approved checkpoint, but does not execute it. Normal verification and silent self-review provide the ordinary self-check; `workflow` establishes the slice outcome when available.
+
+Read [discussion checkpoints](references/checkpoints.md) when selecting or preserving a compact discussion checkpoint or re-entry state.
+
+## Return Supported Direction
+
+Converge when the next sound action no longer depends on unresolved direction, not when every future question is answered.
+
+Return to `workflow` when available, or route directly, with:
+
+- current shared understanding;
+- settled and tentative direction;
+- open questions that still change the route;
+- recommended next action or bounded proposal;
+- its authority state and any selected checkpoint.
+
+If no action is needed, answer or stop. If work is proposed but unapproved, recommend the exact action and wait for the user's response.

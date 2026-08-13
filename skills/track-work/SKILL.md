@@ -1,0 +1,84 @@
+---
+name: track-work
+description: Use when deciding whether proposed or ongoing work needs a durable Working Record, or when creating, resuming, or updating one to preserve task state across execution, pauses, or context loss.
+---
+
+# Track Work
+
+Decide whether proposed or ongoing work needs a durable Working Record, then maintain selected records without turning them into a transcript, fixed Plan, or authority over live evidence and user decisions. Deciding or reading an existing record is read-only; create or update one only when the current mode permits mutation and an authorized durable destination is actually available.
+
+Use this route to decide whether to wait, return to `workflow`, or continue through `execute-work` when those separately installed skills are available:
+
+```text
+[Proposed or ongoing work]
+-> existing Working Record owns it
+   -> confirm the durable destination and read the required reference
+   -> maintain it
+   -> select an authorized slice and route to Execute Work, or wait
+-> no existing Working Record
+   -> would losing context, decisions, evidence, or the next action risk misalignment?
+      -> no
+         -> authorized work in a mutation-permitting mode -> Execute Work
+         -> otherwise -> Workflow or wait
+      -> yes, but a record is unapproved
+         -> recommend a Working Record
+         -> wait
+      -> yes, and a record is approved
+         -> mode and available tools permit durable mutation
+            -> read the required reference
+            -> create the record
+            -> first slice already requested or approved
+               -> select the slice
+               -> Execute Work
+            -> only record creation was approved
+               -> Current Slice: None
+               -> wait
+         -> mode, tool, or durable destination does not permit mutation
+            -> explain the missing condition and recommend the smallest remedy
+            -> wait
+```
+
+## Read The Required Reference
+
+Before creating, resuming, or updating a Working Record, read the complete [Working Record method and schema](references/working-record-schema.md). This skill and its reference form one method. Do not invent fields, states, or transitions from memory; if the reference is unavailable, do not mutate the record.
+
+## Core Contract
+
+- A record preserves current context, one current slice, revisable proposals, durable history, inert Notes, and one next useful action. It is memory; live evidence and user decisions win.
+- `Current understanding` is a present-state summary, not a running task summary or compressed transcript. Replace superseded prose instead of appending completed events.
+- Give detailed facts one schema-owned home. Other sections summarize or point to that owner rather than repeating findings, hashes, commands, or test inventories.
+- Only the user changes task state. Do not infer `Paused`, `Completed`, `Abandoned`, or renewed `Active` state from inactivity, apparent completion, or failure.
+- A **slice** is one bounded piece of learning, delivery, or structural improvement. One slice may span multiple iterations of Workflow's Feedback Loop and calls to other owning skills.
+- Record state changes, not every edit or conversation. Apply authorized in-scope steering and reconcile its meaningful final effect when the slice closes.
+- Before work changes the recorded result, scope, authority, evidence boundary, or stop conditions, decide and record whether it extends the current slice or requires a new one.
+- Questions, criticism, and review findings do not authorize changes. Ordinary in-slice feedback is not a checkpoint or history event merely because work pauses for the user.
+- Workflow establishes slice outcomes. Implementation, verification, self-review, or a review report does not end a slice by itself, and review need not Pass.
+- The record may preserve authority sources, decisions, checkpoints, and evidence; it never creates authority or proof.
+
+## Follow The Lifecycle
+
+After reading the required reference:
+
+1. **Create or resume:** use the established task directory, restore task state after context loss, and orient from live evidence.
+2. **Select or wait:** select a slice only when its concrete work is requested or approved. If only record creation is approved, keep `Current Slice` as `None` and wait. When selected, move one proposal into `Current Slice`, assign its chronological `S-` ID, save the write-ahead state with an available tool, then route to `execute-work` when available or apply the bounded execution method directly.
+3. **Maintain the slice:** keep small steering out of the event history; record accepted extensions before execution; preserve blockers, review routes, and evidence without replacing a coherent slice.
+4. **Close the slice:** move the Workflow-established outcome to History, preserve the original boundary and accepted extensions, rewrite Current Context from the resulting present state, remove completed-event detail already owned by History, and set `Current Slice` to `None`.
+5. **Preserve what matters:** keep task-local decisions, selected checkpoints, evidence pointers, and Notes in their schema-owned sections.
+
+## Context Boundaries
+
+Before expected summarization, context loss, a pause, or transfer, reconcile the record only when task state changed and the destination is accessible. The boundary itself is not a record event.
+
+After summarization, context loss, resume, or session navigation, read the complete record before the next task action when it is accessible and compare it with the current conversation and live state. Identify the task from current context or inspect and ask rather than guessing. A record written on another conversation branch is memory, not authority.
+
+## Route Or Stop
+
+Use `discuss` when available before selecting a slice when a collaborative question could materially change its result, scope, or route.
+
+Use `Blocked` only when a required decision, dependency, capability, evidence source, stop condition, or other unavailable condition prevents safe continuation. Keep the blocked slice current, record what is needed, then stop. General execution authority does not override a stop condition.
+
+When the user requests a separate point-in-time transfer artifact, use `handoff` when available. Creating a handoff does not replace living Working Record state.
+
+## Check The Record
+
+After every observed update, silently compare the record with live evidence and the required reference. Correct clear local issues. Remove historical narration from Current Context once its active consequence is captured, and replace duplicated detail with a compact pointer to its owner. Do not create review history or request review merely because the record changed. Never claim that the record was created, updated, or persisted unless an available tool performed the write and its result was observed.

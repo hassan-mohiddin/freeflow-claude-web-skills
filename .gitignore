@@ -1,0 +1,13 @@
+# Local Freeflow and agent state
+.freeflow/
+.serena/
+
+# Generated release artifacts
+dist/
+
+# Python cache and local OS files
+__pycache__/
+.ruff_cache/
+*.py[cod]
+.DS_Store
+__MACOSX/
