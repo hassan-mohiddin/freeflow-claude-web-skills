@@ -9,8 +9,8 @@ from scripts.repository import (
     EXPECTED_SKILLS,
     RELEASE_VERSION,
     build_release,
+    claude_instructions_from_readme,
     discover_skills,
-    interaction_contract_from_readme,
     validate_repository,
 )
 
@@ -32,6 +32,7 @@ class RepositoryStructureTests(unittest.TestCase):
             "README.md",
             "LICENSE",
             "INTERACTION_CONTRACT.md",
+            "CLAUDE_INSTRUCTIONS.md",
             "MANIFEST.md",
             "CHANGELOG.md",
             "SECURITY.md",
@@ -39,9 +40,9 @@ class RepositoryStructureTests(unittest.TestCase):
             with self.subTest(relative_path=relative_path):
                 self.assertTrue((ROOT / relative_path).is_file())
 
-    def test_readme_contract_matches_canonical_file(self) -> None:
-        expected = (ROOT / "INTERACTION_CONTRACT.md").read_text(encoding="utf-8")
-        actual = interaction_contract_from_readme(ROOT / "README.md")
+    def test_readme_instructions_match_canonical_file(self) -> None:
+        expected = (ROOT / "CLAUDE_INSTRUCTIONS.md").read_text(encoding="utf-8")
+        actual = claude_instructions_from_readme(ROOT / "README.md")
         self.assertEqual(expected.rstrip(), actual.rstrip())
 
     def test_repository_validation_has_no_findings(self) -> None:
@@ -107,9 +108,9 @@ class ReleasePackagingTests(unittest.TestCase):
             checksum_lines = (first / "CHECKSUMS.sha256").read_text(
                 encoding="utf-8"
             ).splitlines()
+            bundle_path = Path(BUNDLE_NAME)
             expected_lines = [
-                f"{digest}  {path.as_posix()}"
-                for path, digest in sorted(first_files.items())
+                f"{first_files[bundle_path]}  {BUNDLE_NAME}"
             ]
             self.assertEqual(expected_lines, checksum_lines)
 

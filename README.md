@@ -15,18 +15,18 @@ See Anthropic's [Use skills in Claude](https://support.claude.com/en/articles/12
 
 ## Install
 
-### 1. Add the Interaction Contract to Claude's instructions
+### 1. Add the Freeflow instructions to Claude
 
-Claude web does not run Freeflow's Claude Code lifecycle hook. Add the following contract manually:
+Claude web does not run Freeflow's Claude Code lifecycle hook. The account-wide instructions provide an always-loaded interaction contract and skill-routing bootstrap:
 
 1. Open Claude's settings.
-2. Find the account-wide **Instructions for Claude** setting.
+2. Find **Instructions for Claude**.
 3. Paste the complete block below and save it.
 4. Start a new conversation before using Freeflow.
 
-> **Global effect:** account-wide instructions apply to all Claude conversations. If you no longer want this behavior, remove the block from your instructions. You may instead use project instructions when you want Freeflow limited to one Claude project.
+> **Global effect:** account-wide instructions apply to all Claude conversations. If you no longer want this behavior, remove the block. You may instead use project instructions when you want Freeflow limited to one Claude project.
 
-<!-- INTERACTION-CONTRACT:START -->
+<!-- CLAUDE-INSTRUCTIONS:START -->
 ```markdown
 # Freeflow Interaction Contract
 
@@ -44,10 +44,17 @@ the next sound action. If a brief discussion is likely to materially improve
 alignment on the outcome, boundaries, tradeoffs, approach, or acceptance,
 recommend it, name the question, and wait. Otherwise choose reversible local
 details and proceed. Do not ask merely because more detail is possible.
-```
-<!-- INTERACTION-CONTRACT:END -->
 
-The canonical copy is also available in [`INTERACTION_CONTRACT.md`](INTERACTION_CONTRACT.md).
+# Freeflow Skills Bootstrap
+
+When Freeflow skills are enabled, use them when their descriptions match the
+request. For consequential work, use the `workflow` skill to select the
+narrowest relevant Freeflow method. Do not invoke skills as ceremony or assume
+they grant tools, permissions, or authorization.
+```
+<!-- CLAUDE-INSTRUCTIONS:END -->
+
+The copy-ready text is also available in [`CLAUDE_INSTRUCTIONS.md`](CLAUDE_INSTRUCTIONS.md). The upstream Interaction Contract remains separately preserved in [`INTERACTION_CONTRACT.md`](INTERACTION_CONTRACT.md).
 
 ### 2. Download and extract the release bundle
 
@@ -71,20 +78,19 @@ For every ZIP inside the extracted `skills/` directory:
 
 1. Open [Customize → Skills](https://claude.ai/customize/skills).
 2. Select the option to add or upload a custom skill.
-3. Upload one `<skill>-0.1.0.zip` file.
+3. Upload one `<skill>-0.1.1.zip` file.
 4. Enable the uploaded skill.
 5. Repeat for the remaining skills you want to use.
 
 Each ZIP has Anthropic's documented structure:
 
 ```text
-workflow-0.1.0.zip
+workflow-0.1.1.zip
 └── workflow/
     ├── SKILL.md
     └── references/
 ```
 
-You can also download individual ZIPs directly from the GitHub Release assets instead of downloading the full bundle.
 
 ## Included skills
 
@@ -124,7 +130,8 @@ Treat third-party skills as instructions with elevated influence:
 skills/                  22 independently installable Claude skill packages
 scripts/                 validation and deterministic packaging tools
 tests/                   repository and archive checks
-INTERACTION_CONTRACT.md  canonical account/project instructions text
+CLAUDE_INSTRUCTIONS.md    copy-ready account/project instructions
+INTERACTION_CONTRACT.md  canonical upstream interaction contract
 MANIFEST.md              package inventory and provenance
 ```
 
@@ -138,7 +145,7 @@ python3 scripts/validate.py
 python3 scripts/package.py
 ```
 
-Packaging produces one stable download bundle, 22 canonical individual skill ZIPs, and SHA-256 checksums under ignored `dist/`.
+Packaging produces one stable download bundle containing 22 individual skill ZIPs, plus bundle and inner checksums under ignored `dist/`.
 
 ## Provenance and license
 

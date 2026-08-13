@@ -7,7 +7,7 @@ import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 
-RELEASE_VERSION = "0.1.0"
+RELEASE_VERSION = "0.1.1"
 BUNDLE_NAME = "freeflow-claude-web-skills.zip"
 EXPECTED_SKILLS = {
     "bypass",
@@ -37,10 +37,10 @@ EXPECTED_SKILLS = {
 _NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 _FRONTMATTER_PATTERN = re.compile(r"\A---\s*\n(.*?)\n---\s*\n", re.DOTALL)
 _LINK_PATTERN = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
-_CONTRACT_PATTERN = re.compile(
-    r"<!-- INTERACTION-CONTRACT:START -->\s*"
+_INSTRUCTIONS_PATTERN = re.compile(
+    r"<!-- CLAUDE-INSTRUCTIONS:START -->\s*"
     r"```markdown\n(.*?)\n```\s*"
-    r"<!-- INTERACTION-CONTRACT:END -->",
+    r"<!-- CLAUDE-INSTRUCTIONS:END -->",
     re.DOTALL,
 )
 _FORBIDDEN_PATH_PARTS = {".DS_Store", "__MACOSX", "__pycache__", "node_modules"}
@@ -52,8 +52,8 @@ This is a download bundle, not a Claude skill upload.
 2. Open https://claude.ai/customize/skills.
 3. Upload each ZIP from the skills directory separately.
 4. Enable the uploaded skills.
-5. Add the Freeflow Interaction Contract to Claude's account-wide instructions
-   as documented in the public repository README.
+5. Add the Freeflow instructions (Interaction Contract + Skills Bootstrap) to
+   Claude's account-wide instructions as documented in the repository README.
 
 Repository:
 https://github.com/hassan-mohiddin/freeflow-claude-web-skills
@@ -77,11 +77,11 @@ def discover_skills(root: Path) -> list[str]:
     )
 
 
-def interaction_contract_from_readme(readme: Path) -> str:
+def claude_instructions_from_readme(readme: Path) -> str:
     text = readme.read_text(encoding="utf-8")
-    match = _CONTRACT_PATTERN.search(text)
+    match = _INSTRUCTIONS_PATTERN.search(text)
     if match is None:
-        raise ValueError("README interaction contract block is missing")
+        raise ValueError("README Claude instructions block is missing")
     return match.group(1)
 
 
@@ -194,6 +194,7 @@ def validate_repository(root: Path) -> list[str]:
         "README.md",
         "LICENSE",
         "INTERACTION_CONTRACT.md",
+        "CLAUDE_INSTRUCTIONS.md",
         "MANIFEST.md",
         "CHANGELOG.md",
         "SECURITY.md",
@@ -202,16 +203,16 @@ def validate_repository(root: Path) -> list[str]:
             findings.append(f"{required}: required public file is missing")
 
     readme = root / "README.md"
-    contract = root / "INTERACTION_CONTRACT.md"
-    if readme.is_file() and contract.is_file():
+    instructions = root / "CLAUDE_INSTRUCTIONS.md"
+    if readme.is_file() and instructions.is_file():
         try:
-            embedded = interaction_contract_from_readme(readme)
+            embedded = claude_instructions_from_readme(readme)
         except ValueError as error:
             findings.append(f"README.md: {error}")
         else:
-            canonical = contract.read_text(encoding="utf-8").rstrip()
+            canonical = instructions.read_text(encoding="utf-8").rstrip()
             if embedded.rstrip() != canonical:
-                findings.append("README.md: embedded Interaction Contract has drifted")
+                findings.append("README.md: embedded Claude instructions have drifted")
 
     for name in sorted(actual):
         findings.extend(_validate_skill(root, name))
@@ -304,7 +305,7 @@ def build_release(root: Path, output: Path) -> ReleaseResult:
 
     archives = [bundle_archive, *individual_archives]
     checksum_file = output / "CHECKSUMS.sha256"
-    checksum_lines = _checksum_lines(archives, output)
+    checksum_lines = _checksum_lines([bundle_archive], output)
     checksum_file.write_text("\n".join(checksum_lines) + "\n", encoding="utf-8")
 
     return ReleaseResult(tuple(archives), checksum_file)

@@ -1,6 +1,6 @@
 # Freeflow Claude Web Skills Manifest
 
-- Release version: **0.1.0**
+- Release version: **0.1.1**
 - Web skill packages: **22**
 - Authoritative upstream: [hassan-mohiddin/freeflow](https://github.com/hassan-mohiddin/freeflow)
 - Authoritative source revision used during preparation: `11740bc6137b21a896a4ab4aae1f85f7d22ccd4b`
@@ -27,7 +27,7 @@ Intentionally excluded from Claude skill archives:
 - `.freeflow/` and `.serena/` local state;
 - repository documentation, tests, and scripts.
 
-The Freeflow Interaction Contract is installed separately through Claude's account-wide or project instructions as described in `README.md`.
+The canonical Freeflow Interaction Contract remains in `INTERACTION_CONTRACT.md`. The copy-ready `CLAUDE_INSTRUCTIONS.md` adds a Claude-web Skills Bootstrap and is installed through Claude's account-wide or project instructions as described in `README.md`.
 
 ## Packages
 
@@ -61,8 +61,10 @@ The Freeflow Interaction Contract is installed separately through Claude's accou
 `scripts/package.py` creates:
 
 - `freeflow-claude-web-skills.zip`: stable-name download bundle containing the 22 individual ZIPs, an extraction notice, and inner skill checksums;
-- `skills/<skill>-0.1.0.zip`: one top-level skill directory per Claude upload archive;
-- `CHECKSUMS.sha256`: SHA-256 digests for the bundle and every individual ZIP.
+- `skills/<skill>-0.1.1.zip`: one top-level skill directory per Claude upload archive;
+- `CHECKSUMS.sha256`: the SHA-256 digest for the externally published bundle.
+
+The bundle contains `SKILL_CHECKSUMS.sha256` for all 22 inner skill ZIPs.
 
 The download bundle is not itself a Claude skill. Users extract it and upload each ZIP from its `skills/` directory separately.
 
@@ -70,4 +72,4 @@ The packaging process uses stable ordering and ZIP metadata so identical source 
 
 ## Verification status
 
-Repository structure, individual ZIP shape, package reproducibility, and checksums are verified locally. Authenticated Claude-web upload and activation remain unverified until release candidates are uploaded and observed in Customize → Skills.
+Repository structure, individual ZIP shape, package reproducibility, and checksums are verified locally. Authenticated Claude-web upload and activation were confirmed by the maintainer; Claude still requires each skill ZIP to be uploaded separately.
