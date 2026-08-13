@@ -72,17 +72,20 @@ Permanent latest-release link:
 
 Use this release asset rather than GitHub's automatically generated **Source code (zip)**. Source archives include development files and are not Claude skill packages.
 
-### 3. Upload each skill ZIP
+### 3. Upload all skills in one batch
 
-For every ZIP inside the extracted `skills/` directory:
+Claude still requires one `SKILL.md` per ZIP, but its upload file picker accepts multiple ZIP files at once:
 
 1. Open [Customize → Skills](https://claude.ai/customize/skills).
 2. Select the option to add or upload a custom skill.
-3. Upload one `<skill>-0.1.1.zip` file.
-4. Enable the uploaded skill.
-5. Repeat for the remaining skills you want to use.
+3. In the file picker, open the extracted `freeflow-claude-web-skills/skills/` directory.
+4. Select all 22 `<skill>-0.1.1.zip` files.
+5. Confirm the selection to upload all 22 skills in one batch.
+6. Wait for Claude's security scans to finish, then confirm the skills are enabled.
 
-Each ZIP has Anthropic's documented structure:
+If your browser or workspace does not allow multi-select, upload the same ZIPs individually. Do not upload the outer `freeflow-claude-web-skills.zip` bundle.
+
+Each selected ZIP has Anthropic's documented structure:
 
 ```text
 workflow-0.1.1.zip
